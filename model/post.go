@@ -213,14 +213,14 @@ func AppendPostUser(req AppendPostUserArgs) (post common.Post, err error) {
 		return common.Post{}, err
 	}
 
-	// 更新元数据
-	meta, err = UpdateThreadMeta(meta.ID)
+	// 删除缓存 - 先删除缓存确保获取最新数据
+	err = dao.DeleteCacheForThread(meta)
 	if err != nil {
 		return common.Post{}, err
 	}
 
-	// 删除缓存
-	err = dao.DeleteCacheForThread(meta)
+	// 更新元数据
+	meta, err = UpdateThreadMeta(meta.ID)
 	if err != nil {
 		return common.Post{}, err
 	}
